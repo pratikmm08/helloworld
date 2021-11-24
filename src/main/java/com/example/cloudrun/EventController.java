@@ -29,6 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class EventController {
+  
+  @RequestMapping(value = "/get", method = RequestMethod.GET)
+  public receiveGet(){
+     System.out.println("Event received!");
+  }
   @RequestMapping(value = "/", method = RequestMethod.POST)
   public ResponseEntity<String> receiveMessage(
       @RequestBody String body, @RequestHeader Map<String, String> headers) {
