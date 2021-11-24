@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,7 +23,7 @@ List<Product> products = productService.findAll();
 return products;
 }
   
-  @PostMapping(path = "/save-cust-info")
+  @PostMapping(path = "/save")
     public String customerInformation(@RequestBody Object cust) {
 
         /* You can write your DAO logic here.
@@ -29,5 +31,9 @@ return products;
          */
 
         return "Customer information saved successfully ::." + cust.toString();
+    }
+  @RequestMapping(value="/save-cust-info", method = RequestMethod.POST)
+    public void process(@RequestBody String payload) throws Exception {
+        System.out.println(payload);
     }
 }
