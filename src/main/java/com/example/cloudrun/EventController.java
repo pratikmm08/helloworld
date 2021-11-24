@@ -26,14 +26,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 public class EventController {
   
-  @RequestMapping(value = "/get", method = RequestMethod.GET)
-  public receiveGet(){
-     System.out.println("Event received!");
-  }
+ @GetMapping("/")
+    String hello() {
+      return "Hello " + name + "!";
+    }
   @RequestMapping(value = "/", method = RequestMethod.POST)
   public ResponseEntity<String> receiveMessage(
       @RequestBody String body, @RequestHeader Map<String, String> headers) {
