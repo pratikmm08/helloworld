@@ -31,9 +31,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 public class EventController {
   
- @GetMapping("/")
+ @GetMapping("/get")
     String hello() {
-      return "Hello " + name + "!";
+      return "Hello ";
     }
   @RequestMapping(value = "/", method = RequestMethod.POST)
   public ResponseEntity<String> receiveMessage(
