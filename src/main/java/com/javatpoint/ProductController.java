@@ -28,6 +28,6 @@ return products;
          * For time being I am printing the customer data just to show the POST call is working.
          */
 
-        return "Customer information saved successfully ::." + cust.protoPayload();
+        return "Customer information saved successfully ::." + cust.protoPayload;
     }
 }
