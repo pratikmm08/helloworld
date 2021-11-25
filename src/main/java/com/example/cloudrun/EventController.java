@@ -17,51 +17,65 @@
 package com.example.cloudrun;
 
 // [START eventarc_generic_handler]
-import java.util.Map;
-import org.json.JSONObject;
-import org.springframework.http.HttpStatus;
+import com.west.customerexperience.cxportalacmserver.enums.ErrorCode;
+import com.west.customerexperience.cxportalacmserver.exception.AppMgrException;
+import com.west.customerexperience.cxportalacmserver.service.EventarcFileImportService;
+import lombok.extern.slf4j.Slf4j;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+@Slf4j
 @RestController
-public class EventController {
-  
- @GetMapping("/get")
-    String hello() {
-      return "Hello ";
+public class EventArcController {
+
+
+    @PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity receiveMessage(
+            @RequestBody String body, @RequestHeader Map<String, String> headers) throws JSONException {
+
+
+
+        JSONObject jsonBody = new JSONObject(body);
+
+        if(jsonBody.getJSONObject("resource").get("type").equals("gcs_bucket")
+            && jsonBody.getJSONObject("resource").getJSONObject("labels").get("bucket_name").equals("pmm-test-bucket")
+            && jsonBody.getJSONObject("protoPayload").getString("resourceName").contains("pmm-test-bucket"))
+        {
+
+            log.info("Event import request received!");
+
+            List<String> requiredFields = Arrays.asList("ce-methodname", "ce-servicename", "ce-resourcename", "ce-subject");
+
+            for (String field : requiredFields) {
+                if (headers.get(field) == null) {
+                    String msg = String.format("Fail Event import, expected missing header: %s.", field);
+                    log.error(msg);
+                    
+                }
+            }
+
+            String resourceName = headers.get("ce-resourcename");
+
+            String[] importData = resourceName.split("/");
+
+            int clientId = Integer.parseInt(importData[5]);
+            String tableId =importData[6];
+            String fileName = importData[7];
+
+            String bucketName = jsonBody.getJSONObject("resource").getJSONObject("labels").getString("bucket_name");
+            String projectId = jsonBody.getJSONObject("resource").getJSONObject("labels").getString("project_id");
+            String filePath = clientId+"/"+tableId+"/"+fileName;
+            //eventarcFileImportService.fileImport(clientId,tableId,bucketName,filePath);
+log.info("Event import request Done!"+bucketName+"||"+projectId+"||"+fileName+"||"+filePath+"||"+tableId+"||"+clientId+"||"+fileName);
+        }
+        return ResponseEntity.noContent().build();
     }
-  @RequestMapping(value = "/", method = RequestMethod.POST)
-  public ResponseEntity<String> receiveMessage(
-      @RequestBody String body, @RequestHeader Map<String, String> headers) {
-    System.out.println("Event received!");
-    
-    // Log headers
-    System.out.println("HEADERS:");
-    headers.forEach((k, v) -> {
-      if (!k.equals("Authorization")) {
-        System.out.printf("%s: %s\n", k, v);
-      }
-    });
-    System.out.println("");
-
-    // Log body
-    System.out.println("BODY:");
-    JSONObject jsonBody = new JSONObject(body);
-    String jsonString = jsonBody.toString(2);
-    System.out.println(jsonString);
-
-    // Return headers and body
-    JSONObject json = new JSONObject();
-    JSONObject jsonHeaders = new JSONObject();
-    json.put("headers", jsonHeaders);
-    json.put("body", jsonBody);
-
-    return new ResponseEntity<String>(json.toString(), HttpStatus.OK);
-  }
 }
 // [END eventarc_generic_handler]
