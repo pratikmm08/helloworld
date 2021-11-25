@@ -28,7 +28,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 @RestController
 public class EventController {
 
