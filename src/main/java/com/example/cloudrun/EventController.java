@@ -33,7 +33,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-public class EventArcController {
+public class EventController {
 
 
     @PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
