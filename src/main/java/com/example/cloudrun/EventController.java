@@ -17,10 +17,7 @@
 package com.example.cloudrun;
 
 // [START eventarc_generic_handler]
-import com.west.customerexperience.cxportalacmserver.enums.ErrorCode;
-import com.west.customerexperience.cxportalacmserver.exception.AppMgrException;
-import com.west.customerexperience.cxportalacmserver.service.EventarcFileImportService;
-import lombok.extern.slf4j.Slf4j;
+
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.http.MediaType;
@@ -49,14 +46,14 @@ public class EventController {
             && jsonBody.getJSONObject("protoPayload").getString("resourceName").contains("pmm-test-bucket"))
         {
 
-            log.info("Event import request received!");
+            System.out.println("Event import request received!");
 
             List<String> requiredFields = Arrays.asList("ce-methodname", "ce-servicename", "ce-resourcename", "ce-subject");
 
             for (String field : requiredFields) {
                 if (headers.get(field) == null) {
                     String msg = String.format("Fail Event import, expected missing header: %s.", field);
-                    log.error(msg);
+                    System.out.println(msg);
                     
                 }
             }
@@ -73,7 +70,7 @@ public class EventController {
             String projectId = jsonBody.getJSONObject("resource").getJSONObject("labels").getString("project_id");
             String filePath = clientId+"/"+tableId+"/"+fileName;
             //eventarcFileImportService.fileImport(clientId,tableId,bucketName,filePath);
-log.info("Event import request Done!"+bucketName+"||"+projectId+"||"+fileName+"||"+filePath+"||"+tableId+"||"+clientId+"||"+fileName);
+System.out.println("Event import request Done!"+bucketName+"||"+projectId+"||"+fileName+"||"+filePath+"||"+tableId+"||"+clientId+"||"+fileName);
         }
         return ResponseEntity.noContent().build();
     }
