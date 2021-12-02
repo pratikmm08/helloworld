@@ -71,7 +71,7 @@ public class EventController {
             //eventarcFileImportService.fileImport(clientId,tableId,bucketName,filePath);
 System.out.println("Event import request Done!"+bucketName+"||"+projectId+"||"+fileName+"||"+filePath+"||"+tableId+"||"+clientId+"||"+fileName);
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.badRequest().build();
     }
 }
 // [END eventarc_generic_handler]
