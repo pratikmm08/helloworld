@@ -59,7 +59,7 @@ public class EventController {
   }
   
   @RequestMapping(value = "/test", method = RequestMethod.POST)
-  public ResponseEntity<String> receiveMessage(
+  public ResponseEntity<String> receiveMessage1(
       @RequestBody Map<String, Object> body, @RequestHeader Map<String, String> headers) {
     System.out.println("Event received!");
     
@@ -81,6 +81,11 @@ public class EventController {
     });
 
     return new ResponseEntity<String>("Success", HttpStatus.OK);
+  }
+  
+  @RequestMapping(value = "/get", method = RequestMethod.GET)
+  public ResponseEntity<String> receiveMessage2() {
+    System.out.println("Event received!");
   }
 }
 // [END eventarc_generic_handler]
