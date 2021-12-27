@@ -86,6 +86,7 @@ public class EventController {
   @RequestMapping(value = "/get", method = RequestMethod.POST)
   public ResponseEntity<String> receiveMessage2() {
     System.out.println("Event received!");
+    return new ResponseEntity<String>("Success", HttpStatus.OK);
   }
 }
 // [END eventarc_generic_handler]
