@@ -83,7 +83,7 @@ public class EventController {
     return new ResponseEntity<String>("Success", HttpStatus.OK);
   }
   
-  @RequestMapping(value = "/get", method = RequestMethod.GET)
+  @RequestMapping(value = "/get", method = RequestMethod.POST)
   public ResponseEntity<String> receiveMessage2() {
     System.out.println("Event received!");
   }
