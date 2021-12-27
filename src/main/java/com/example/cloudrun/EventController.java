@@ -57,5 +57,30 @@ public class EventController {
 
     return new ResponseEntity<String>(json.toString(), HttpStatus.OK);
   }
+  
+  @RequestMapping(value = "/test", method = RequestMethod.POST)
+  public ResponseEntity<String> receiveMessage(
+      @RequestBody Map<String, Object> body, @RequestHeader Map<String, String> headers) {
+    System.out.println("Event received!");
+    
+    // Log headers
+    System.out.println("HEADERS:");
+    headers.forEach((k, v) -> {
+      if (!k.equals("Authorization")) {
+        System.out.printf("%s: %s\n", k, v);
+      }
+    });
+    System.out.println("");
+
+    // Log body
+    System.out.println("BODY:");
+    body.forEach((k, v) -> {
+      if (!k.equals("Authorization")) {
+        System.out.printf("%s: %s\n", k, v);
+      }
+    });
+
+    return new ResponseEntity<String>("Success", HttpStatus.OK);
+  }
 }
 // [END eventarc_generic_handler]
